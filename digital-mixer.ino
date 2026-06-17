@@ -196,15 +196,13 @@ void setup()
 {
     Serial.begin(115200);
 
-    Wire.begin();
-    Wire.setClock(100000);
-    setChAddrs();
+    Wire.begin(); // initiate i2c
+    Wire.setClock(100000); // set i2c clock speed
+    setChAddrs(); // set all channel addresses
 
-    resetChannels();
+    resetChannels(); // reset all channels
 
     delay(1000);
-
-    Serial.println("ADAU1701 Toggle Test");
 }
 uint32_t floatToInt32(float x) {
   return (uint32_t)(x * 0x800000);
