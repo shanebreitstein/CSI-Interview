@@ -479,7 +479,7 @@ void readAnalogPins(void* taskParams) {
 
     // update mux control pins
     digitalWrite(envMuxPins[0], (muxControl & 0b01));
-    digitalWrite(envMuxPins[1], (muxControl & 0b10 >> 1));
+    digitalWrite(envMuxPins[1], ((muxControl & 0b10) >> 1));
 
     xSemaphoreGive(paramMutex);
     vTaskDelay(pdMS_TO_TICKS(10));
