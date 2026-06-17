@@ -115,9 +115,10 @@ const int numDigitalPins = 14;
 const int analogPins[] = {A0, A1, A2, A3, A8, A10, A11, A12, A13, A14, A15, A16, A17}; // all valid analog pins
 const int digitalPins[] = {0, 1, 2, 3, 4, 5, 31, 32, 33, 34}; // all valid digital pins
 const int envMuxPins[] = {3, 4};
-const float VCF_MAX = 14450.0;
+const float VCF_MAX = 14450.0; // max vcf frequency 
 
-int dVals[numDigitalPins];
+// arrays to store read-in  values
+int dVals[numDigitalPins]; 
 int aVals[numAnalogPins];
 
 // default values
@@ -131,7 +132,8 @@ float envPol;
 float vcfFreq = 14000.0, vcfRes = 0.7, vcflfoAmp = 0.0, vcfEnvAmp = 0.0, vcfOctCon = 0.0;
 //unsigned long startTime, endTime;
 float noiseAmp = 0.25;
-// read in values
+
+// read in parameters
 float subAmp;
 float lfoAmp, pwmAmp;
 
@@ -147,6 +149,8 @@ TaskHandle_t digitalReadTask;
 TaskHandle_t soundParamTask;
 SemaphoreHandle_t synthMutex;
 SemaphoreHandle_t paramMutex;
+
+//synthesizer voice output logic
 int voicesMIDI[NUM_VOICES]; // holds the MIDI notes of all voices
 int voicesOn = 0; // stores number of voices currently on
 int voiceIndex;
@@ -160,7 +164,6 @@ void setup() {
   AudioMemory(120);
 
   Serial.begin(115200);
-  pinMode(13, arduino::OUTPUT);
 
   sgtl5000_1.enable();
   sgtl5000_1.volume(0.8);
@@ -169,13 +172,14 @@ void setup() {
   for (int i = 0; i < sizeof(digitalPins) / sizeof(digitalPins[0]); i++) {
     pinMode(digitalPins[i], arduino::INPUT);
   }
-
+    pinMode(envMuxPins[0], arduino::INPUT);
+    pinMode(envMuxPins[1], arduino::INPUT);
   // init analog pins for input
   for (int i = 0; i < numAnalogPins; i++)
   {
     pinMode(analogPins[i], arduino::INPUT);
   }
-  // set all voices off
+  // set all voices off and establish all default values for parameters
   for(int i = 0; i < NUM_VOICES; i++) {
     //voicesOn[i] = 0;
     voicesMIDI[i] = -1;
