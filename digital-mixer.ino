@@ -83,6 +83,8 @@ void setPan(float angle, int channel) { // angle is from 0 to 90, 0 is hardpanne
 }
 
 void setFilter(uint8_t filterType, float frequency, float gain, float Q, int channel) {
+    // calculate and update filter values for high shelf, peaking, and low shelf
+    // formula for calculation found at https://www.w3.org/TR/audio-eq-cookbook/ 
   // ** in future, compare quality of float vs double values
   uint32_t filtInts [5];
   float omega_0 = 2 * M_PI * (frequency/FS);   
